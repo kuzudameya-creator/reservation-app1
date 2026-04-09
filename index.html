@@ -1,23 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>予約管理アプリ</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css" type="text/css2">
+<script src="test.js"></script>
+</head>
+
 <body>
-  <div class="container">
-    <h1>予約管理</h1>
 
-    <div class="card">
-      <div class="form-group">
-        <label>名前</label>
-        <input type="text" id="name" />
-      </div>
-      <div class="form-group">
+<div class="header">予約管理アプリ</div>
+
+<div class="container">
+
+  <!-- フォーム -->
+  <div class="card">
+    <label>名前</label>
+    <input type="text" id="name" class="input" placeholder="例：山田太郎">
+
+    <div class="form-group">
+      <div>
         <label>日付</label>
-        <input type="date" id="date" />
+        <input type="date" id="date" class="input">
       </div>
-      <button onclick="addReservation()">予約する</button>
+
+      <div>
+        <label>時間</label>
+        <select id="time" class="input">
+          <option value="">選択してください</option>
+          <option>10:00</option>
+          <option>11:00</option>
+          <option>12:00</option>
+          <option>13:00</option>
+        </select>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>予約一覧</h3>
-      <div id="list" class="list"></div>
-    </div>
+    <button class="button" onclick="addReservation()">予約する</button>
   </div>
 
-  <div id="toast" class="toast">予約が完了しました</div>
+  <!-- 一覧 -->
+  <div id="list"></div>
+
+</div>
+
+
+
+</body>
+</html>

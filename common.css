@@ -1,89 +1,122 @@
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: #f5f7fb;
-    }
+/* ===== デザイン変数 ===== */
+:root {
+  --primary: #1f2937;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --subtext: #6b7280;
+  --radius: 8px;
+}
 
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-    }
+/* ===== 全体 ===== */
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  margin: 0;
+  color: var(--text);
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+/* ===== ヘッダー ===== */
+.header {
+  background: var(--primary);
+  color: white;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
+/* ===== コンテナ ===== */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+/* ===== カード ===== */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
+/* ===== 見出し ===== */
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--subtext);
+}
 
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-    }
+/* ===== 入力 ===== */
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  margin-top: 5px;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+/* ===== 横並び ===== */
+.form-row {
+  display: flex;
+  gap: 10px;
+}
 
-    button:hover {
-      background: #1e40af;
-    }
+.form-row > div {
+  flex: 1;
+}
 
-    .list {
-      display: grid;
-      gap: 15px;
-    }
+/* ===== ボタン ===== */
+button {
+  background: #2563eb;
+  color: white;
+  border-radius: 8px;
+  padding: 10px;
+  transition: 0.2s;
+}
 
-    .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-      border-radius: 12px;
-      background: #f9fafb;
-    }
+button:hover {
+  background: #1d4ed8;
+}
 
-    .delete {
-      background: #ef4444;
-      padding: 8px 12px;
-      border-radius: 8px;
-    }
+.button-danger {
+  background: var(--danger);
+}
 
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #10b981;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 10px;
-      opacity: 0;
-      transition: 0.3s;
-    }
-    }
+/* ===== テーブル風リスト ===== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 14px;
+}
+
+.table th {
+  background: #f9fafb;
+  color: var(--subtext);
+  font-weight: 600;
+}
+
+/* ===== 空状態 ===== */
+.empty {
+  text-align: center;
+  color: var(--subtext);
+  padding: 20px;
+}
+
+/* ===== スマホ ===== */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
