@@ -1,0 +1,23 @@
+<body>
+  <div class="container">
+    <h1>予約管理</h1>
+
+    <div class="card">
+      <div class="form-group">
+        <label>名前</label>
+        <input type="text" id="name" />
+      </div>
+      <div class="form-group">
+        <label>日付</label>
+        <input type="date" id="date" />
+      </div>
+      <button onclick="addReservation()">予約する</button>
+    </div>
+
+    <div class="card">
+      <h3>予約一覧</h3>
+      <div id="list" class="list"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">予約が完了しました</div>
