@@ -28,7 +28,17 @@ body {
   color: var(--text);
   line-height: 1.6;
 }
+/* PC用：通常表示 */
+.pc-only {
+    display: block;
+}
 
+/* スマホ用：画面幅767px以下で非表示にする */
+@media screen and (max-width: 767px) {
+    .pc-only {
+        display: none !important;
+    }
+}
 /* ===== ヘッダー ===== */
 .header {
   background: var(--primary);
