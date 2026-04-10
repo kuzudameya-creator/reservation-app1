@@ -1,14 +1,23 @@
-/* ===== デザイン変数 ===== */
+/* ===== デザイン設計 ===== */
 :root {
   --primary: #1f2937;
   --accent: #2563eb;
+  --accent-hover: #1d4ed8;
   --danger: #dc2626;
-  --bg: #f3f4f6;
+
+  --bg: #f9fafb;
   --card: #ffffff;
   --border: #e5e7eb;
+
   --text: #111827;
   --subtext: #6b7280;
+
   --radius: 8px;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
 }
 
 /* ===== 全体 ===== */
@@ -17,13 +26,14 @@ body {
   background: var(--bg);
   margin: 0;
   color: var(--text);
+  line-height: 1.6;
 }
 
 /* ===== ヘッダー ===== */
 .header {
   background: var(--primary);
   color: white;
-  padding: 14px 20px;
+  padding: var(--space-md) var(--space-lg);
   font-size: 16px;
   font-weight: 600;
 }
@@ -31,92 +41,129 @@ body {
 /* ===== コンテナ ===== */
 .container {
   max-width: 900px;
-  margin: 30px auto;
-  padding: 0 20px;
+  margin: var(--space-lg) auto;
+  padding: 0 var(--space-md);
 }
 
 /* ===== カード ===== */
 .card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
 }
 
-/* ===== 見出し ===== */
+/* ===== セクションタイトル ===== */
 .section-title {
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 10px;
   color: var(--subtext);
+  margin-bottom: var(--space-md);
 }
 
-/* ===== 入力 ===== */
+/* ===== フォーム ===== */
+label {
+  display: block;
+  font-size: 13px;
+  margin-top: var(--space-md);
+}
+
 .input {
   width: 100%;
   padding: 10px;
+  margin-top: var(--space-xs);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   font-size: 14px;
-  margin-top: 5px;
+  box-sizing: border-box;
 }
 
 /* ===== 横並び ===== */
-.form-row {
+.row {
   display: flex;
-  gap: 10px;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
 }
 
-.form-row > div {
+.row > div {
   flex: 1;
 }
 
 /* ===== ボタン ===== */
-button {
-  background: #2563eb;
+.button {
+  display: inline-block;
+  padding: 10px 16px;
+  margin-top: var(--space-lg);
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
   color: white;
-  border-radius: 8px;
-  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
   transition: 0.2s;
 }
 
-button:hover {
-  background: #1d4ed8;
+.button:hover {
+  background: var(--accent-hover);
+}
+
+.button:active {
+  transform: scale(0.98);
 }
 
 .button-danger {
   background: var(--danger);
 }
 
-/* ===== テーブル風リスト ===== */
+/* ===== テーブル ===== */
 .table {
   width: 100%;
   border-collapse: collapse;
 }
 
 .table th, .table td {
-  padding: 12px;
+  padding: var(--space-md);
   border-bottom: 1px solid var(--border);
-  text-align: left;
   font-size: 14px;
 }
 
 .table th {
-  background: #f9fafb;
+  background: #f3f4f6;
   color: var(--subtext);
   font-weight: 600;
+}
+
+/* ===== ステータス ===== */
+.status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.status.todo {
+  background: #fef3c7;
+}
+
+.status.done {
+  background: #d1fae5;
 }
 
 /* ===== 空状態 ===== */
 .empty {
   text-align: center;
+  padding: var(--space-lg);
   color: var(--subtext);
-  padding: 20px;
+}
+
+/* ===== セクション間 ===== */
+#list {
+  margin-top: var(--space-lg);
 }
 
 /* ===== スマホ ===== */
 @media (max-width: 600px) {
-  .form-row {
+  .row {
     flex-direction: column;
   }
 }

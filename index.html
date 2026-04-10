@@ -3,64 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>予約管理アプリ</title>
+<title>予約管理システム</title>
 
 <!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css" type="text/css2">
-<script src="test.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+</style>
 </head>
 
 <body>
 
-<div class="header">予約管理アプリ</div>
+<div class="header">予約管理システム</div>
 
 <div class="container">
 
-  <!-- フォーム -->
-  <div class="card">
-    <label>名前</label>
-    <input type="text" id="name" class="input" placeholder="例：山田太郎">
+<div class="card">
+  <div class="section-title">予約登録</div>
 
-    <div class="form-group">
-      <div>
-        <label>日付</label>
-        <input type="date" id="date" class="input">
-      </div>
+  <label>名前</label>
+  <input id="name" class="input">
 
-      <div>
-        <label>時間</label>
-        <select id="time" class="input">
-          <option value="">選択してください</option>
-          <option>10:00</option>
-          <option>11:00</option>
-          <option>12:00</option>
-          <option>13:00</option>
-        </select>
-      </div>
+  <div class="row">
+    <div>
+      <label>日付</label>
+      <input type="date" id="date" class="input">
     </div>
-
-    <button class="button" onclick="addReservation()">予約する</button>
+    <div>
+      <label>時間</label>
+      <select id="time" class="input">
+        <option value="">選択</option>
+        <option>10:00</option>
+        <option>11:00</option>
+        <option>12:00</option>
+        <option>13:00</option>
+      </select>
+    </div>
   </div>
 
-  <!-- 一覧 -->
-  <div id="list"></div>
+  <button class="button" onclick="addReservation()">登録</button>
+</div>
+
+<div id="list"></div>
 
 </div>
-<script>
-  let reservations = [];
 
-/* ===== 初期読み込み ===== */
-window.onload = function () {
+<script>
+let reservations = [];
+
+window.onload = () => {
   const saved = localStorage.getItem("reservations");
-  if (saved) {
-    reservations = JSON.parse(saved);
-  }
-  renderReservations();
+  if (saved) reservations = JSON.parse(saved);
+  render();
 };
 
-/* ===== 追加 ===== */
 function addReservation() {
   const name = document.getElementById("name").value.trim();
   const date = document.getElementById("date").value;
@@ -71,74 +68,90 @@ function addReservation() {
     return;
   }
 
-  const today = new Date().toISOString().split("T")[0];
-  if (date < today) {
-    alert("過去の日付は選べません");
-    return;
-  }
-
-  const exists = res2rvations.some(res => res.date === date && res.time === time);
+  const exists = reservations.some(r => r.date === date && r.time === time);
   if (exists) {
-    alert("その時間はすでに予約されています");
+    alert("その時間は予約済みです");
     return;
   }
 
-  reservations.push({ name, date, time });
+  reservations.push({
+    id: Date.now(),
+    name,
+    date,
+    time,
+    status: "未対応"
+  });
 
-  saveData();
-  renderReservations();
-  clearForm();
+  save();
+  render();
 }
 
-/* ===== 表示 ===== */
-function renderReservations() {
+function render() {
   const list = document.getElementById("list");
-  list.innerHTML = "";
 
   if (reservations.length === 0) {
-    list.innerHTML = '<div class="empty">予約がありません</div>';
+    list.innerHTML = '<div class="empty">現在、予約データは登録されていません</div>';
     return;
   }
 
-  reservations.forEach((res, index) => {
-    const div = document.createElement("div");
-    div.className = "reservation";
+  reservations.sort((a, b) => a.date.localeCompare(b.date));
 
-    div.innerHTML = `
-      <div>
-        <strong>${res.name}</strong><br>
-        ${res.date} / ${res.time}
-      </div>
-      <button class="button button-danger" onclick="deleteReservation(${index})">削除</button>
+  let html = `
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>名前</th>
+        <th>日付</th>
+        <th>時間</th>
+        <th>状態</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+
+  reservations.forEach((r, i) => {
+    html += `
+      <tr>
+        <td>${r.id}</td>
+        <td>${r.name}</td>
+        <td>${r.date}</td>
+        <td>${r.time}</td>
+        <td>
+          <span class="status ${r.status === "完了" ? "done" : "todo"}">
+            ${r.status}
+          </span>
+        </td>
+        <td>
+          <button onclick="toggleStatus(${i})">切替</button>
+          <button class="button button-danger" onclick="deleteReservation(${i})">削除</button>
+        </td>
+      </tr>
     `;
-
-    list.appendChild(div);
   });
+
+  html += "</tbody></table>";
+  list.innerHTML = html;
 }
 
-/* ===== 削除 ===== */
-function deleteReservation(index) {
-  if (confirm("削除しますか？")) {
-    reservations.splice(index, 1);
-    saveData();
-    renderReservations();
-  }
+function toggleStatus(i) {
+  reservations[i].status =
+    reservations[i].status === "未対応" ? "完了" : "未対応";
+  save();
+  render();
 }
 
-/* ===== 保存 ===== */
-function saveData() {
+function deleteReservation(i) {
+  reservations.splice(i, 1);
+  save();
+  render();
+}
+
+function save() {
   localStorage.setItem("reservations", JSON.stringify(reservations));
 }
-
-/* ===== リセット ===== */
-function clearForm() {
-  document.getElementById("name").value = "";
-  document.getElementById("date").value = "";
-  document.getElementById("time").value = "";
-}
-  
 </script>
-
 
 </body>
 </html>
