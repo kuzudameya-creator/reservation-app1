@@ -3,53 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TODO管理</title>
 
-<title>予約管理アプリ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css" type="text/css2">
-<script src="test.js"></script>
+<style>
+body { font-family: 'Noto Sans JP'; background:#f9fafb; margin:0;}
+.container { max-width:700px; margin:30px auto; padding:10px;}
+.card { background:white; padding:20px; margin-bottom:20px; border:1px solid #ddd;}
+.button { background:#2563eb; color:white; border:none; padding:8px 12px; cursor:pointer;}
+.todo { display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;}
+.completed { text-decoration:line-through; color:#888;}
+</style>
 </head>
 
 <body>
 
-<div class="header">予約管理アプリ</div>
-
 <div class="container">
 
-  <!-- フォーム -->
-  <div class="card">
-    <label>名前</label>
-    <input type="text" id="name" class="input" placeholder="例：山田太郎">
+<div class="card">
+  <input id="task">
+  <button onclick="addTodo()" class="button">追加</button>
+</div>
 
-    <div class="form-group">
-      <div>
-        <label>日付</label>
-        <input type="date" id="date" class="input">
-      </div>
-
-      <div>
-        <label>時間</label>
-        <select id="time" class="input">
-          <option value="">選択してください</option>
-          <option>10:00</option>
-          <option>11:00</option>
-          <option>12:00</option>
-          <option>13:00</option>
-        </select>
-      </div>
-    </div>
-
-    <button class="button" onclick="addReservation()">予約する</button>
-  </div>
-
-  <!-- 一覧 -->
-  <div id="list"></div>
+<div id="list" class="card"></div>
 
 </div>
 
+<script>
+let todos = [];
 
+/* 初期読み込み */
+window.onload = loadTodos;
+
+/* 取得 */
+async function loadTodos() {
+  const res = await fetch("http://localhost:3000/todos");
+  todos = await res.json();
+  render();
+}
+
+/* 追加 */
+async function addTodo() {
+  const text = document.getElementById("task").value;
+
+  await fetch("http://localhost:3000/todos", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ text })
+  });
+
+  loadTodos();
+}
+
+/* 表示 */
+function render() {
+  const list = document.getElementById("list");
+
+  let html = "";
+
+  todos.forEach(todo => {
+    html += `
+      <div class="todo">
+        <span onclick="toggleTodo(${todo.id})" class="${todo.completed ? 'completed' : ''}">
+          ${todo.text}
+        </span>
+        <div>
+          <button onclick="editTodo(${todo.id})">編集</button>
+          <button onclick="deleteTodo(${todo.id})">削除</button>
+        </div>
+      </div>
+    `;
+  });
+
+  list.innerHTML = html;
+}
+
+/* 更新 */
+async function toggleTodo(id) {
+  const todo = todos.find(t => t.id === id);
+
+  await fetch(`http://localhost:3000/todos/${id}`, {
+    method:"PUT",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ completed: !todo.completed })
+  });
+
+  loadTodos();
+}
+
+/* 削除 */
+async function deleteTodo(id) {
+  await fetch(`http://localhost:3000/todos/${id}`, {
+    method:"DELETE"
+  });
+
+  loadTodos();
+}
+
+/* 編集 */
+async function editTodo(id) {
+  const text = prompt("編集", "");
+  if (!text) return;
+
+  await fetch(`http://localhost:3000/todos/${id}`, {
+    method:"PUT",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ text })
+  });
+
+  loadTodos();
+}
+</script>
 
 </body>
 </html>
